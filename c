@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>특수체육 AI 포털 · 마케팅 캐러셀</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:#07071a;color:#fff;min-height:100vh;}
+
+/* ── 상단 헤더 ── */
+.top-bar{
+  background:rgba(10,10,30,0.95);border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.top-logo{font-size:16px;font-weight:900;color:#a78bfa;}
+.top-links{display:flex;gap:12px;}
+.top-links a{
+  color:#94a3b8;font-size:12px;font-weight:600;text-decoration:none;
+  padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.1);
+  transition:all 0.2s;
+}
+.top-links a:hover{color:#fff;border-color:#a78bfa;}
+.top-links a.active{background:#7c3aed;color:#fff;border-color:#7c3aed;}
+
+/* ── 페이지 제목 ── */
+.page-hero{
+  text-align:center;padding:50px 20px 30px;
+  background:radial-gradient(ellipse at 50% 0%,rgba(124,58,237,0.2) 0%,transparent 65%);
+}
+.page-hero h1{font-size:clamp(22px,4vw,38px);font-weight:900;margin-bottom:8px;}
+.page-hero h1 span{
+  background:linear-gradient(90deg,#a78bfa,#67e8f9);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-hero p{font-size:14px;color:#94a3b8;max-width:500px;margin:0 auto 20px;}
+.channel-tabs{
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;
+}
+.ctab{
+  padding:7px 18px;border-radius:20px;font-size:12px;font-weight:700;
+  border:1px solid rgba(255,255,255,0.12);color:#94a3b8;cursor:pointer;
+  transition:all 0.2s;background:transparent;
+}
+.ctab.on{background:var(--cc,#7c3aed);color:#fff;border-color:var(--cc,#7c3aed);}
+
+/* ── 캐러셀 뷰포트 ── */
+.carousel-area{max-width:520px;margin:0 auto;padding:20px 20px 0;}
+.carousel-frame{
+  position:relative;overflow:hidden;border-radius:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+  aspect-ratio:4/5;
+  background:#111;
+}
+.slides-track{
+  display:flex;width:100%;height:100%;
+  transition:transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.slide{
+  min-width:100%;height:100%;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:36px 32px;text-align:center;
+  position:relative;overflow:hidden;
+}
+/* 슬라이드별 배경 */
+.s1{background:linear-gradient(160deg,#0f0c29 0%,#302b63 50%,#24243e 100%);}
+.s2{background:linear-gradient(160deg,#0a0a1a 0%,#1a0533 40%,#2d1b69 100%);}
+.s3{background:linear-gradient(160deg,#0c1445 0%,#1e3a8a 50%,#1d4ed8 100%);}
+.s4{background:linear-gradient(160deg,#052e16 0%,#14532d 50%,#166534 100%);}
+.s5{background:linear-gradient(160deg,#4a044e 0%,#7c3aed 50%,#6d28d9 100%);}
+
+/* 슬라이드 공통 */
+.slide-num{
+  position:absolute;top:16px;left:16px;
+  font-size:11px;color:rgba(255,255,255,0.4);font-weight:600;
+}
+.slide-tag{
+  padding:5px 14px;border-radius:20px;font-size:11px;font-weight:800;
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;
+  display:inline-block;
+}
+.tag-red{background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.3);}
+.tag-purple{background:rgba(167,139,250,0.2);color:#a78bfa;border:1px solid rgba(167,139,250,0.3);}
+.tag-blue{background:rgba(96,165,250,0.2);color:#93c5fd;border:1px solid rgba(96,165,250,0.3);}
+.tag-green{background:rgba(52,211,153,0.2);color:#6ee7b7;border:1px solid rgba(52,211,153,0.3);}
+.tag-pink{background:rgba(244,114,182,0.2);color:#f9a8d4;border:1px solid rgba(244,114,182,0.3);}
+
+.slide-emoji{font-size:64px;margin-bottom:12px;line-height:1;}
+.slide-title{font-size:clamp(20px,4vw,28px);font-weight:900;margin-bottom:10px;line-height:1.2;}
+.slide-body{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:16px;}
+.slide-highlight{
+  background:rgba(255,255,255,0.08);border-radius:12px;
+  padding:12px 16px;width:100%;margin-bottom:14px;
+}
+.hl-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;text-align:left;}
+.hl-row:last-child{margin-bottom:0;}
+.hl-icon{font-size:18px;flex-shrink:0;}
+.hl-text{font-size:12px;color:rgba(255,255,255,0.85);}
+.hl-text strong{color:#fff;font-size:13px;}
+
+/* 통계 그리드 */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-bottom:14px;}
+.stat-item{
+  background:rgba(255,255,255,0.06);border-radius:12px;padding:14px 10px;text-align:center;
+}
+.stat-n{font-size:28px;font-weight:900;color:#6ee7b7;}
+.stat-l{font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;}
+
+/* CTA 버튼 */
+.slide-cta{
+  padding:12px 28px;border-radius:12px;border:none;
+  font-size:14px;font-weight:800;cursor:pointer;
+  text-decoration:none;display:inline-block;
+  transition:all 0.2s;margin-top:4px;
+}
+.cta-white{background:#fff;color:#1a1a2e;}
+.cta-white:hover{background:#e2e8f0;}
+.cta-glow{background:linear-gradient(90deg,#7c3aed,#db2777);color:#fff;
+  box-shadow:0 0 24px rgba(124,58,237,0.5);}
+.cta-glow:hover{box-shadow:0 0 36px rgba(124,58,237,0.8);}
+
+/* 소셜 증거 */
+.social-proof{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.06);border-radius:20px;
+  padding:6px 14px;font-size:11px;color:rgba(255,255,255,0.6);
+  margin-bottom:12px;
+}
+.sp-dot{width:7px;height:7px;border-radius:50%;background:#10b981;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* 채널 워터마크 */
+.channel-mark{
+  position:absolute;bottom:14px;right:14px;
+  font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;
+}
+
+/* ── 캐러셀 컨트롤 ── */
+.carousel-controls{
+  display:flex;align-items:center;justify-content:center;gap:16px;
+  padding:18px 0 8px;
+}
+.ctrl-btn{
+  width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.05);color:#fff;font-size:18px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;
+}
+.ctrl-btn:hover{background:rgba(124,58,237,0.3);border-color:#7c3aed;}
+.dots-wrap{display:flex;gap:6px;}
+.cdot{
+  width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);
+  transition:all 0.3s;cursor:pointer;
+}
+.cdot.active{background:#a78bfa;width:24px;border-radius:4px;}
+
+/* ── 슬라이드 카운터 & 자동재생 ── */
+.slide-progress{
+  max-width:520px;margin:0 auto;padding:0 20px;
+}
+.progress-bar{
+  height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,#7c3aed,#db2777);
+  border-radius:2px;transition:width 0.1s linear;
+}
+
+/* ── 채널별 공유 패널 ── */
+.share-panel{
+  max-width:520px;margin:20px auto;padding:0 20px 40px;
+}
+.share-title{font-size:14px;font-weight:800;color:#94a3b8;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.share-btn{
+  padding:12px;border-radius:12px;border:none;
+  font-size:13px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  transition:all 0.2s;text-align:left;
+}
+.sb-kakao{background:#FEE500;color:#000;}
+.sb-kakao:hover{background:#f5dc00;}
+.sb-band{background:#23ac00;color:#fff;}
+.sb-band:hover{background:#1d9000;}
+.sb-insta{background:linear-gradient(45deg,#f09433,#dc2743,#cc2366);color:#fff;}
+.sb-insta:hover{opacity:0.85;}
+.sb-link{background:rgba(124,58,237,0.2);color:#a78bfa;border:1px solid rgba(124,58,237,0.3);}
+.sb-link:hover{background:rgba(124,58,237,0.35);}
+.sb-email{background:rgba(6,182,212,0.15);color:#67e8f9;border:1px solid rgba(6,182,212,0.3);}
+.sb-email:hover{background:rgba(6,182,212,0.3);}
+.sb-download{background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);}
+.sb-download:hover{background:rgba(16,185,129,0.3);}
+
+/* toast */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.8);color:#fff;padding:10px 22px;
+  border-radius:20px;font-size:13px;opacity:0;
+  transition:opacity 0.3s;z-index:200;pointer-events:none;
+}
+#toast.show{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- 상단 바 -->
+<div class="top-bar">
+  <div class="top-logo">🏃 특수체육AI포털</div>
+  <div class="top-links">
+    <a href="index.html">홈</a>
+    <a href="carousel.html" class="active">캐러셀</a>
+    <a href="email.html">이메일</a>
+    <a href="kit.html">마케팅 키트</a>
+  </div>
+</div>
+
+<!-- 페이지 히어로 -->
+<div class="page-hero">
+  <h1>SNS 마케팅 <span>캐러셀</span></h1>
+  <p>카카오·밴드·인스타·이메일 — 채널별 최적화 슬라이드를 복사해서 바로 공유하세요</p>
+  <div class="channel-tabs">
+    <button class="ctab on" style="--cc:#7c3aed" onclick="setChannel('all',this)">전체</button>
+    <button class="ctab" style="--cc:#FEE500;color:#000" onclick="setChannel('kakao',this)">카카오톡</button>
+    <button class="ctab" style="--cc:#23ac00" onclick="setChannel('band',this)">네이버 밴드</button>
+    <button class="ctab" style="--cc:#c13584" onclick="setChannel('insta',this)">인스타그램</button>
+    <button class="ctab" style="--cc:#06b6d4" onclick="setChannel('email',this)">이메일</button>
+  </div>
+</div>
+
+<!-- 캐러셀 -->
+<div class="carousel-area">
+  <div class="carousel-frame">
+    <div class="slides-track" id="track">
+
+      <!-- 슬라이드 1: 문제 제기 -->
+      <div class="slide s1">
+        <span class="slide-num">01 / 05</span>
+        <span class="slide-tag tag-red">😫 지금 이런 고민 있으신가요?</span>
+        <div class="slide-emoji">🏫</div>
+        <div class="slide-title">특수체육 수업,<br>준비가 너무 힘들어요</div>
+        <div class="slide-body">학생마다 다른 수준, 동기 부여의 어려움, 객관적 평가 불가… 현장 선생님들의 실제 고민입니다.</div>
+        <div class="slide-highlight">
+          <div class="hl-row"><span class="hl-icon">😔</span><span class="hl-text"><strong>수업 준비 시간</strong> 부족으로 개별 맞춤 지도 어려움</span></div>
+          <div class="hl-row"><span class="hl-icon">📊</span><span class="hl-text"><strong>학생 성취 기록</strong>이 주관적 관찰에만 의존</span></div>
+          <div class="hl-row"><span class="hl-icon">😴</span><span class="hl-text"><strong>참여 동기 저하</strong>로 수업 집중도 낮음</span></div>
+        </div>
+        <div class="channel-mark" id="chmark1">모든 채널</div>
+      </div>
+
+      <!-- 슬라이드 2: 솔루션 -->
+      <div class="slide s2">
+        <span class="slide-num">02 / 05</span>
+        <span class="slide-tag tag-purple">✨ 해결책을 찾았습니다</span>
+        <div class="slide-emoji">🤖</div>
+        <div class="slide-title">AI가 학생 동작을<br>자동으로 인식합니다</div>
+        <div class="slide-body">MediaPipe AI 기술로 카메라가 학생의 팔·몸·거리를 실시간 감지해 성공/실패를 자동 판정!</div>
+        <div class="slide-highlight">
+          <div class="hl-row"><span class="hl-icon">📷</span><span class="hl-text"><strong>카메라 하나</strong>로 즉시 시작 — 설치 불필요</span></div>
+          <div class="hl-row"><span class="hl-icon">⚡</span><span class="hl-text"><strong>실시간 판정</strong> — 0.1초 만에 성공/실패 피드백</span></div>
+          <div class="hl-row"><span class="hl-icon">🆓</span><span class="hl-text"><strong>완전 무료</strong> — 영구 무료, 광고 없음</span></div>
+        </div>
+        <div class="social-proof"><span class="sp-dot"></span>지금 이 순간도 선생님들이 사용 중!</div>
+        <div class="channel-mark" id="chmark2">모든 채널</div>
+      </div>
+
+      <!-- 슬라이드 3: 기능 소개 -->
+      <div class="slide s3">
+        <span class="slide-num">03 / 05</span>
+        <span class="slide-tag tag-blue">🎮 5가지 AI 게임</span>
+        <div class="slide-emoji">🏋️</div>
+        <div class="slide-title">학생 수준별<br>맞춤 게임 5종</div>
+        <div class="slide-highlight">
+          <div class="hl-row"><span class="hl-icon">🖼️</span><span class="hl-text"><strong>픽토그램 박수</strong> — 기초 수준, 박수 패턴 따라하기</span></div>
+          <div class="hl-row"><span class="hl-icon">🔢</span><span class="hl-text"><strong>모양 카운트</strong> — 버튼 터치로 횟수 카운트</span></div>
+          <div class="hl-row"><span class="hl-icon">🤸</span><span class="hl-text"><strong>팔 동작 v2</strong> — AI가 만세·팔벌리기 자동 감지</span></div>
+          <div class="hl-row"><span class="hl-icon">🏋️</span><span class="hl-text"><strong>스쿼트·거리 v3</strong> — 앉기·앞뒤 이동 실시간 측정</span></div>
+          <div class="hl-row"><span class="hl-icon">📊</span><span class="hl-text"><strong>교사 대시보드</strong> — 학생별 성취 기록 관리</span></div>
+        </div>
+        <a class="slide-cta cta-white" href="https://aigw2026-cpu.github.io/special-edu-portal/" target="_blank">▶ 지금 무료로 시작</a>
+        <div class="channel-mark" id="chmark3">모든 채널</div>
+      </div>
+
+      <!-- 슬라이드 4: 효과/결과 -->
+      <div class="slide s4">
+        <span class="slide-num">04 / 05</span>
+        <span class="slide-tag tag-green">📈 실제 기대 효과</span>
+        <div class="slide-emoji">🎊</div>
+        <div class="slide-title">수업이 달라집니다</div>
+        <div class="stat-grid">
+          <div class="stat-item"><div class="stat-n">↑90%</div><div class="stat-l">학생 참여 동기</div></div>
+          <div class="stat-item"><div class="stat-n">0원</div><div class="stat-l">도입 비용</div></div>
+          <div class="stat-item"><div class="stat-n">5분</div><div class="stat-l">수업 적용 시간</div></div>
+          <div class="stat-item"><div class="stat-n">즉시</div><div class="stat-l">결과 기록</div></div>
+        </div>
+        <div class="slide-body" style="font-size:12px;">"처음엔 반신반의했는데, 아이들이 스스로 하려고 해요. 성공 화면 보고 너무 좋아해서 저도 뿌듯했어요 😊"<br><strong style="color:#6ee7b7">— 특수학급 담임 선생님</strong></div>
+        <div class="channel-mark" id="chmark4">모든 채널</div>
+      </div>
+
+      <!-- 슬라이드 5: CTA -->
+      <div class="slide s5">
+        <span class="slide-num">05 / 05</span>
+        <span class="slide-tag tag-pink">🚀 지금 바로 시작하세요</span>
+        <div class="slide-emoji">💜</div>
+        <div class="slide-title">선생님의 수업을<br>바꿀 준비가 됐어요</div>
+        <div class="slide-body">설치 없이 링크 하나로 시작. 카메라 켜고 게임 시작하면 AI가 알아서 인식합니다.</div>
+        <div class="slide-highlight" style="text-align:left;">
+          <div class="hl-row"><span class="hl-icon">🔗</span><span class="hl-text" style="font-size:11px;word-break:break-all;color:#a78bfa;font-weight:700;">https://aigw2026-cpu.github.io/special-edu-portal/</span></div>
+        </div>
+        <a class="slide-cta cta-glow" href="https://aigw2026-cpu.github.io/special-edu-portal/" target="_blank">🎮 무료로 시작하기 →</a>
+        <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:10px;">#특수체육 #특수교육 #AI교육 #에듀테크 #보조공학</div>
+        <div class="channel-mark" id="chmark5">모든 채널</div>
+      </div>
+
+    </div><!-- slides-track -->
+  </div><!-- carousel-frame -->
+
+  <!-- 컨트롤 -->
+  <div class="carousel-controls">
+    <button class="ctrl-btn" onclick="move(-1)">‹</button>
+    <div class="dots-wrap" id="dots"></div>
+    <button class="ctrl-btn" onclick="move(1)">›</button>
+  </div>
+</div>
+
+<!-- 진행 바 -->
+<div class="slide-progress">
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+</div>
+
+<!-- 공유 패널 -->
+<div class="share-panel">
+  <div class="share-title">📤 채널별 바로 공유</div>
+  <div class="share-grid">
+    <button class="share-btn sb-kakao" onclick="shareKakao()">💛 카카오톡 공유</button>
+    <button class="share-btn sb-band" onclick="shareBand()">🟢 네이버 밴드</button>
+    <button class="share-btn sb-insta" onclick="copyInsta()">📸 인스타 캡션 복사</button>
+    <button class="share-btn sb-email" onclick="goEmail()">📧 이메일 템플릿</button>
+    <button class="share-btn sb-link" onclick="copyLink()">🔗 링크 복사</button>
+    <button class="share-btn sb-download" onclick="goKit()">📦 마케팅 키트</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+let cur = 0;
+const total = 5;
+let autoTimer;
+const PORTAL = 'https://aigw2026-cpu.github.io/special-edu-portal/';
+const CAROUSEL = 'https://aigw2026-cpu.github.io/special-edu-portal/carousel.html';
+
+// 도트 생성
+const dotsEl = document.getElementById('dots');
+for(let i=0;i<total;i++){
+  const d=document.createElement('div');
+  d.className='cdot'+(i===0?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function goTo(n){
+  cur=((n%total)+total)%total;
+  document.getElementById('track').style.transform='translateX(-'+cur*100+'%)';
+  document.querySelectorAll('.cdot').forEach((d,i)=>{
+    d.className='cdot'+(i===cur?' active':'');
+  });
+  resetAuto();
+}
+function move(d){goTo(cur+d);}
+
+// 자동 재생
+function resetAuto(){
+  clearInterval(autoTimer);
+  let t=0;
+  document.getElementById('prog').style.width='0%';
+  autoTimer=setInterval(()=>{
+    t+=100;
+    document.getElementById('prog').style.width=(t/5000*100)+'%';
+    if(t>=5000){goTo(cur+1);t=0;}
+  },100);
+}
+resetAuto();
+
+// 터치 스와이프
+let tx=0;
+const frame=document.querySelector('.carousel-frame');
+frame.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;});
+frame.addEventListener('touchend',e=>{
+  const dx=tx-e.changedTouches[0].clientX;
+  if(Math.abs(dx)>40) move(dx>0?1:-1);
+});
+
+// 채널 전환
+function setChannel(ch,btn){
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const labels={
+    'all':'모든 채널','kakao':'카카오톡','band':'네이버 밴드',
+    'insta':'인스타그램','email':'이메일'
+  };
+  for(let i=1;i<=5;i++){
+    document.getElementById('chmark'+i).textContent=labels[ch]||'모든 채널';
+  }
+}
+
+// 공유 함수
+function shareKakao(){
+  const txt='🏃 특수체육 AI 게임 소개!\n\nAI가 학생 동작 자동 인식 — 설치 없이 무료\n\n👉 '+PORTAL+'\n\n#특수체육 #AI교육 #무료';
+  navigator.clipboard.writeText(txt).then(()=>toast('💛 카카오 공유 문구 복사됨! 카톡 붙여넣기 하세요'));
+}
+function shareBand(){
+  const txt='📣 특수체육 AI 게임 플랫폼 공유드립니다!\n\nAI 카메라로 학생 팔동작·스쿼트·거리이동을 자동 인식하는 무료 체육 게임입니다. 설치 없이 바로 시작!\n\n링크: '+PORTAL;
+  navigator.clipboard.writeText(txt).then(()=>toast('🟢 밴드 공유 문구 복사됨!'));
+}
+function copyInsta(){
+  const txt='AI가 학생 동작을 실시간 인식 🤸\n\n특수체육 수업에서 학생들이\n스스로 움직이며 성공하는 경험! ✨\n\n링크는 프로필에! 💜\n\n#특수체육 #특수교육 #AI교육 #보조공학기기\n#체육수업 #특수학급 #에듀테크 #SmartEdu';
+  navigator.clipboard.writeText(txt).then(()=>toast('📸 인스타 캡션 복사됨!'));
+}
+function copyLink(){
+  navigator.clipboard.writeText(PORTAL).then(()=>toast('🔗 포털 링크 복사됨!'));
+}
+function goEmail(){window.location.href='email.html';}
+function goKit(){window.location.href='kit.html';}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>
