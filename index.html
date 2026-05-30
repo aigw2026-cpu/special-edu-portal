@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>특수체육 AI 모션 게임 포털 | 현장 선생님용</title>
+<meta name="description" content="AI 카메라로 몸을 인식하는 특수체육 게임 플랫폼. 현장 선생님을 위한 올인원 체육 학습 솔루션.">
+<style>
+:root{
+  --brand:#7c3aed;--brand2:#06b6d4;--brand3:#f59e0b;
+  --dark:#0a0a14;--dark2:#12122a;--dark3:#1a1a3e;
+  --text:#f1f5f9;--muted:#94a3b8;--border:rgba(255,255,255,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;}
+
+/* ── 네비게이션 ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,20,0.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-logo{font-size:18px;font-weight:900;color:#fff;}
+.nav-logo span{color:#a78bfa;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;transition:color 0.2s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{
+  background:var(--brand);color:#fff;padding:7px 18px;
+  border-radius:20px;font-size:13px;font-weight:700;text-decoration:none;
+  transition:background 0.2s;
+}
+.nav-cta:hover{background:#6d28d9;}
+
+/* ── 히어로 ── */
+#hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:80px 24px 60px;
+  background:radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.25) 0%, transparent 70%),
+             radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.15) 0%, transparent 60%),
+             var(--dark);
+  position:relative;overflow:hidden;
+}
+.hero-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+.hbadge{
+  padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700;
+  border:1px solid;
+}
+.hb-purple{border-color:#7c3aed;color:#a78bfa;background:rgba(124,58,237,0.15);}
+.hb-cyan{border-color:#06b6d4;color:#67e8f9;background:rgba(6,182,212,0.15);}
+.hb-amber{border-color:#f59e0b;color:#fcd34d;background:rgba(245,158,11,0.15);}
+.hb-green{border-color:#10b981;color:#6ee7b7;background:rgba(16,185,129,0.15);}
+
+#hero h1{
+  font-size:clamp(32px,6vw,68px);font-weight:900;line-height:1.1;
+  margin-bottom:20px;
+}
+#hero h1 .line1{color:#fff;}
+#hero h1 .line2{
+  background:linear-gradient(90deg,#a78bfa,#67e8f9);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+#hero .sub{font-size:clamp(15px,2vw,20px);color:var(--muted);max-width:600px;margin:0 auto 36px;line-height:1.7;}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.hbtn-primary{
+  padding:14px 32px;background:var(--brand);color:#fff;
+  border-radius:12px;font-size:16px;font-weight:800;text-decoration:none;
+  box-shadow:0 8px 32px rgba(124,58,237,0.4);transition:all 0.2s;
+}
+.hbtn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(124,58,237,0.6);}
+.hbtn-secondary{
+  padding:14px 32px;background:rgba(255,255,255,0.06);color:#fff;
+  border:1px solid var(--border);border-radius:12px;
+  font-size:16px;font-weight:700;text-decoration:none;transition:all 0.2s;
+}
+.hbtn-secondary:hover{background:rgba(255,255,255,0.1);}
+
+/* 통계 카드 */
+.stats-row{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+  margin-top:60px;
+}
+.stat-card{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:16px;padding:20px 28px;text-align:center;min-width:120px;
+}
+.stat-num{font-size:32px;font-weight:900;color:#a78bfa;}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:4px;}
+
+/* ── 섹션 공통 ── */
+section{padding:80px 24px;}
+.section-inner{max-width:1100px;margin:0 auto;}
+.section-tag{
+  display:inline-block;padding:4px 14px;border-radius:20px;
+  font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.st-purple{background:rgba(124,58,237,0.2);color:#a78bfa;}
+.st-cyan{background:rgba(6,182,212,0.2);color:#67e8f9;}
+.st-amber{background:rgba(245,158,11,0.2);color:#fcd34d;}
+.st-green{background:rgba(16,185,129,0.2);color:#6ee7b7;}
+.st-pink{background:rgba(236,72,153,0.2);color:#f9a8d4;}
+.section-title{font-size:clamp(24px,4vw,40px);font-weight:900;margin-bottom:10px;}
+.section-sub{font-size:15px;color:var(--muted);margin-bottom:40px;max-width:600px;}
+
+/* ── 게임 그리드 ── */
+#games{background:var(--dark2);}
+.games-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:20px;
+}
+.game-card{
+  background:var(--dark3);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  transition:transform 0.3s,box-shadow 0.3s;
+  text-decoration:none;color:inherit;display:block;
+  position:relative;
+}
+.game-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.game-card-head{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  font-size:64px;position:relative;overflow:hidden;
+}
+.game-card-head::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 50%,var(--dark3));
+}
+.gc-badge{
+  position:absolute;top:12px;right:12px;z-index:1;
+  padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;
+}
+.gc-v1{background:#7c3aed;color:#fff;}
+.gc-v2{background:#06b6d4;color:#000;}
+.gc-v3{background:#f59e0b;color:#000;}
+.gc-v4{background:#10b981;color:#000;}
+.gc-v5{background:#ec4899;color:#fff;}
+.gc-new{animation:glow 1.5s ease-in-out infinite alternate;}
+@keyframes glow{from{box-shadow:0 0 6px currentColor}to{box-shadow:0 0 18px currentColor}}
+
+.game-card-body{padding:20px;}
+.gc-title{font-size:18px;font-weight:800;margin-bottom:6px;color:#fff;}
+.gc-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.gc-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.gc-tag{
+  padding:3px 9px;border-radius:14px;font-size:10px;font-weight:600;
+}
+.gct-p{background:rgba(167,139,250,0.15);color:#a78bfa;}
+.gct-c{background:rgba(103,232,249,0.15);color:#67e8f9;}
+.gct-a{background:rgba(252,211,77,0.15);color:#fcd34d;}
+.gct-g{background:rgba(110,231,183,0.15);color:#6ee7b7;}
+.gct-r{background:rgba(252,165,165,0.15);color:#fca5a5;}
+.game-card-foot{
+  padding:12px 20px;
+  background:rgba(0,0,0,0.25);
+  font-size:11px;color:#555;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#10b981;display:inline-block;margin-right:5px;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.gc-arrow{color:var(--muted);font-size:16px;}
+
+/* ── 선생님 가이드 ── */
+#guide{background:var(--dark);}
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.guide-card{
+  background:var(--dark2);border:1px solid var(--border);
+  border-radius:16px;padding:22px;
+}
+.guide-step{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--brand);color:#fff;
+  font-size:15px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;
+}
+.guide-title{font-size:16px;font-weight:800;margin-bottom:6px;}
+.guide-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+.guide-tip{
+  margin-top:10px;padding:8px 12px;
+  background:rgba(124,58,237,0.15);border-radius:8px;
+  font-size:11px;color:#a78bfa;
+}
+
+/* ── 기능 비교표 ── */
+#compare{background:var(--dark2);}
+.compare-table{
+  width:100%;border-collapse:collapse;
+  background:var(--dark3);border-radius:16px;overflow:hidden;
+}
+.compare-table th{
+  padding:14px 16px;text-align:center;font-size:13px;font-weight:800;
+  background:rgba(124,58,237,0.2);
+}
+.compare-table th:first-child{text-align:left;}
+.compare-table td{
+  padding:12px 16px;text-align:center;font-size:13px;color:var(--muted);
+  border-bottom:1px solid var(--border);
+}
+.compare-table td:first-child{text-align:left;color:#fff;font-weight:600;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table tr:hover td{background:rgba(255,255,255,0.02);}
+.chk{color:#10b981;font-size:16px;}
+.cross{color:#ef4444;font-size:14px;}
+.partial{color:#f59e0b;font-size:14px;}
+</style>
+</head>
+<body>
+
+<!-- 네비게이션 -->
+<nav>
+  <div class="nav-logo">🏃 특수체육<span>AI</span>포털</div>
+  <div class="nav-links">
+    <a href="#games">게임</a>
+    <a href="#guide">사용법</a>
+    <a href="#compare">비교</a>
+    <a href="#marketing">홍보</a>
+    <a href="#contact">공유</a>
+  </div>
+  <a class="nav-cta" href="#games">▶ 바로 시작</a>
+</nav>
+
+<!-- 히어로 -->
+<section id="hero">
+  <div>
+    <div class="hero-badges">
+      <span class="hbadge hb-purple">🤖 AI 포즈 인식</span>
+      <span class="hbadge hb-cyan">📷 실시간 카메라</span>
+      <span class="hbadge hb-amber">🏫 특수교육 최적화</span>
+      <span class="hbadge hb-green">✅ 무료 · 설치 불필요</span>
+    </div>
+    <h1>
+      <div class="line1">현장 선생님을 위한</div>
+      <div class="line2">AI 특수체육 게임 포털</div>
+    </h1>
+    <p class="sub">카메라만 있으면 OK! AI가 학생의 몸 동작을 실시간으로 인식해 성공·실패를 자동 판정합니다. 설치 없이 브라우저만으로 바로 시작하세요.</p>
+    <div class="hero-btns">
+      <a class="hbtn-primary" href="#games">🎮 게임 목록 보기</a>
+      <a class="hbtn-secondary" href="#guide">📖 선생님 가이드</a>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">5</div><div class="stat-lbl">게임 종류</div></div>
+      <div class="stat-card"><div class="stat-num">0원</div><div class="stat-lbl">완전 무료</div></div>
+      <div class="stat-card"><div class="stat-num">AI</div><div class="stat-lbl">자동 판정</div></div>
+      <div class="stat-card"><div class="stat-num">즉시</div><div class="stat-lbl">브라우저 실행</div></div>
+      <div class="stat-card"><div class="stat-num">📱</div><div class="stat-lbl">모바일 지원</div></div>
+    </div>
+  </div>
+</section>
+<!-- 게임 목록 -->
+<section id="games">
+  <div class="section-inner">
+    <span class="section-tag st-purple">🎮 ALL GAMES</span>
+    <h2 class="section-title">전체 게임 모음</h2>
+    <p class="section-sub">v1부터 v3까지, 그리고 특수체육 픽토그램 게임까지 — 모든 게임을 한 곳에서 바로 시작하세요.</p>
+    <div class="games-grid">
+
+      <!-- 픽토그램 게임 -->
+      <a class="game-card" href="https://aigw2026-cpu.github.io/special-edu-motion-game/" target="_blank">
+        <div class="game-card-head" style="background:linear-gradient(135deg,#1e3a5f,#0ea5e9)">
+          🖼️<span class="gc-badge gc-v1">기초</span>
+        </div>
+        <div class="game-card-body">
+          <div class="gc-title">픽토그램 박수 게임</div>
+          <div class="gc-desc">특수체육 픽토그램을 보고 박수를 치는 기초 모션 학습 게임. 교사 대시보드와 학생 포털 포함.</div>
+          <div class="gc-tags">
+            <span class="gc-tag gct-p">픽토그램</span>
+            <span class="gc-tag gct-c">박수 인식</span>
+            <span class="gc-tag gct-g">교사 대시보드</span>
+            <span class="gc-tag gct-a">기초 수준</span>
+          </div>
+        </div>
+        <div class="game-card-foot"><span><span class="live-dot"></span>라이브</span><span class="gc-arrow">→</span></div>
+      </a>
+
+      <!-- v1 모양 카운트 -->
+      <a class="game-card" href="https://aigw2026-cpu.github.io/shape-follow-game/" target="_blank">
+        <div class="game-card-head" style="background:linear-gradient(135deg,#4c1d95,#7c3aed)">
+          🔢<span class="gc-badge gc-v2">v1</span>
+        </div>
+        <div class="game-card-body">
+          <div class="gc-title">모양 카운트 게임</div>
+          <div class="gc-desc">화면의 모양을 보고 버튼을 눌러 카운트! 목표 횟수 달성 시 성공. 터치/클릭 기반 기초 모션.</div>
+          <div class="gc-tags">
+            <span class="gc-tag gct-p">버튼 카운트</span>
+            <span class="gc-tag gct-g">성공 체크</span>
+            <span class="gc-tag gct-c">5가지 모양</span>
+            <span class="gc-tag gct-a">도트 진행바</span>
+          </div>
+        </div>
+        <div class="game-card-foot"><span><span class="live-dot"></span>라이브</span><span class="gc-arrow">→</span></div>
+      </a>
+
+      <!-- v2 팔 동작 -->
+      <a class="game-card" href="https://aigw2026-cpu.github.io/shape-follow-game/game-v2.html" target="_blank">
+        <div class="game-card-head" style="background:linear-gradient(135deg,#831843,#db2777)">
+          🤸<span class="gc-badge gc-v3 gc-new">v2 AI</span>
+        </div>
+        <div class="game-card-body">
+          <div class="gc-title">팔 동작 AI 인식 게임</div>
+          <div class="gc-desc">MediaPipe AI가 팔 위치를 실시간 감지! 만세·팔벌리기·한팔올리기 등 5가지 팔 동작을 몸으로 따라하면 자동 패스.</div>
+          <div class="gc-tags">
+            <span class="gc-tag gct-r">AI 포즈 인식</span>
+            <span class="gc-tag gct-c">실시간 카메라</span>
+            <span class="gc-tag gct-p">5가지 팔 동작</span>
+            <span class="gc-tag gct-g">패스/실패 판정</span>
+          </div>
+        </div>
+        <div class="game-card-foot"><span><span class="live-dot"></span>카메라 필요</span><span class="gc-arrow">→</span></div>
+      </a>
+
+      <!-- v3 거리 스쿼트 -->
+      <a class="game-card" href="https://aigw2026-cpu.github.io/shape-follow-game/game-v3.html" target="_blank">
+        <div class="game-card-head" style="background:linear-gradient(135deg,#0c4a6e,#0369a1,#0891b2)">
+          🏋️<span class="gc-badge gc-v4 gc-new">v3 NEW</span>
+        </div>
+        <div class="game-card-body">
+          <div class="gc-title">거리·스쿼트 동작 게임</div>
+          <div class="gc-desc">앉았다 일어나기(스쿼트) + 앞뒤 이동 거리를 AI가 실시간 감지! 어깨 너비로 카메라 거리를 자동 계산해 이동 패스 판정.</div>
+          <div class="gc-tags">
+            <span class="gc-tag gct-a">스쿼트 감지</span>
+            <span class="gc-tag gct-g">앞뒤 거리 측정</span>
+            <span class="gc-tag gct-r">AI 깊이 분석</span>
+            <span class="gc-tag gct-c">5가지 미션</span>
+            <span class="gc-tag gct-p">거리 게이지</span>
+          </div>
+        </div>
+        <div class="game-card-foot"><span><span class="live-dot"></span>넓은 공간 권장</span><span class="gc-arrow">→</span></div>
+      </a>
+
+      <!-- 교사 대시보드 -->
+      <a class="game-card" href="https://aigw2026-cpu.github.io/shape-follow-game/dashboard.html" target="_blank">
+        <div class="game-card-head" style="background:linear-gradient(135deg,#14532d,#16a34a)">
+          📊<span class="gc-badge gc-v5">대시보드</span>
+        </div>
+        <div class="game-card-body">
+          <div class="gc-title">교사 통합 대시보드</div>
+          <div class="gc-desc">학생별 카운트 추적, 성공 자동 감지, KPI 통계, 모양별 활동 차트. 수업 중 실시간 모니터링 도구.</div>
+          <div class="gc-tags">
+            <span class="gc-tag gct-g">학생 관리</span>
+            <span class="gc-tag gct-p">KPI 통계</span>
+            <span class="gc-tag gct-c">실시간 추적</span>
+            <span class="gc-tag gct-a">활동 로그</span>
+          </div>
+        </div>
+        <div class="game-card-foot"><span><span class="live-dot"></span>교사 전용</span><span class="gc-arrow">→</span></div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- 선생님 사용 가이드 -->
+<section id="guide">
+  <div class="section-inner">
+    <span class="section-tag st-cyan">📖 TEACHER GUIDE</span>
+    <h2 class="section-title">선생님 사용 가이드</h2>
+    <p class="section-sub">처음 사용하시는 선생님도 5분이면 수업에 바로 활용할 수 있습니다.</p>
+    <div class="guide-grid">
+      <div class="guide-card">
+        <div class="guide-step">1</div>
+        <div class="guide-title">📱 기기 준비</div>
+        <div class="guide-desc">스마트폰, 태블릿, 노트북 어떤 기기든 OK. 크롬 브라우저를 열고 이 포털 링크를 공유하세요.</div>
+        <div class="guide-tip">💡 태블릿을 학생 정면에 거치하면 가장 좋습니다</div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-step">2</div>
+        <div class="guide-title">🎮 게임 선택</div>
+        <div class="guide-desc">학생 수준에 맞는 게임을 선택하세요. 기초는 픽토그램·모양 카운트, 심화는 AI 팔 동작·거리 게임.</div>
+        <div class="guide-tip">💡 처음엔 v1(모양 카운트)부터 시작하세요</div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-step">3</div>
+        <div class="guide-title">📷 카메라 허용</div>
+        <div class="guide-desc">v2·v3 AI 게임은 카메라 권한이 필요합니다. 브라우저 팝업에서 "허용"을 클릭하세요.</div>
+        <div class="guide-tip">💡 카메라 허용 후 3~5초 MediaPipe 로딩 시간이 있어요</div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-step">4</div>
+        <div class="guide-title">🧍 위치 설정 (v3)</div>
+        <div class="guide-desc">v3 거리 게임은 게임 시작 전 학생이 기준 자세로 3초간 서있으면 자동으로 기준점이 설정됩니다.</div>
+        <div class="guide-tip">💡 전신이 카메라에 보이는 거리(약 2m)가 적당합니다</div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-step">5</div>
+        <div class="guide-title">🎯 목표 설정</div>
+        <div class="guide-desc">교사 패널에서 목표 횟수를 조정할 수 있습니다. 학생 능력에 따라 3~10회로 설정하세요.</div>
+        <div class="guide-tip">💡 처음엔 3회부터 시작해 점차 늘려가세요</div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-step">6</div>
+        <div class="guide-title">📊 결과 확인</div>
+        <div class="guide-desc">게임 완료 후 교사 대시보드에서 학생별 성공 횟수, 활동 기록, KPI를 확인하세요.</div>
+        <div class="guide-tip">💡 대시보드는 여러 학생을 동시에 관리할 수 있어요</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 기능 비교표 -->
+<section id="compare">
+  <div class="section-inner">
+    <span class="section-tag st-amber">📊 COMPARE</span>
+    <h2 class="section-title">게임별 기능 비교</h2>
+    <p class="section-sub">학생 수준과 수업 목표에 맞는 게임을 선택하세요.</p>
+    <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>기능</th>
+          <th>픽토그램</th>
+          <th>모양 v1</th>
+          <th>팔 동작 v2</th>
+          <th>거리 v3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>AI 카메라 인식</td><td class="cross">✕</td><td class="cross">✕</td><td class="chk">✓</td><td class="chk">✓</td></tr>
+        <tr><td>스쿼트 감지</td><td class="cross">✕</td><td class="cross">✕</td><td class="cross">✕</td><td class="chk">✓</td></tr>
+        <tr><td>앞뒤 거리 측정</td><td class="cross">✕</td><td class="cross">✕</td><td class="cross">✕</td><td class="chk">✓</td></tr>
+        <tr><td>팔 동작 5종</td><td class="cross">✕</td><td class="cross">✕</td><td class="chk">✓</td><td class="cross">✕</td></tr>
+        <tr><td>버튼 카운트</td><td class="chk">✓</td><td class="chk">✓</td><td class="cross">✕</td><td class="cross">✕</td></tr>
+        <tr><td>성공 도트 체크</td><td class="partial">△</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td></tr>
+        <tr><td>교사 대시보드</td><td class="chk">✓</td><td class="chk">✓</td><td class="cross">✕</td><td class="cross">✕</td></tr>
+        <tr><td>컨페티 성공 효과</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td></tr>
+        <tr><td>라운드 기록 로그</td><td class="cross">✕</td><td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td></tr>
+        <tr><td>필요 공간</td><td>좁아도 OK</td><td>좁아도 OK</td><td>중간</td><td>넓은 공간</td></tr>
+        <tr><td>권장 대상</td><td>초급</td><td>초·중급</td><td>중급</td><td>중·고급</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- 홍보 전략 섹션 -->
+<section id="marketing" style="background:var(--dark);">
+  <div class="section-inner">
+    <span class="section-tag st-pink">📣 MARKETING</span>
+    <h2 class="section-title">홍보 & 배포 전략</h2>
+    <p class="section-sub">현장 선생님들에게 효과적으로 알리고 실제 수업에서 활용되도록 하는 전략입니다.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:36px;margin-bottom:12px;">📲</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:8px;">SNS 공유 전략</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          • 특수교육 교사 카카오톡 오픈채팅방 공유<br>
+          • 교육부·시교육청 특수체육 연구회 게시판<br>
+          • 인스타그램 #특수체육 #특수교육 해시태그<br>
+          • 유튜브 사용 시연 영상 제작
+        </div>
+      </div>
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:36px;margin-bottom:12px;">🏫</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:8px;">학교 배포 전략</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          • 이 포털 링크 하나만 공유하면 OK<br>
+          • QR코드 생성 후 교실 게시판 부착<br>
+          • 학교 홈페이지 체육 수업 자료실 등록<br>
+          • 특수학급 담임 교사 단체 문자 발송
+        </div>
+      </div>
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:36px;margin-bottom:12px;">🎓</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:8px;">연수·연구회 활용</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          • 특수체육 직무연수 시연 자료<br>
+          • 특수교육 연구회 사례 발표<br>
+          • 교육청 우수수업 자료 신청<br>
+          • AI 교육 도구 활용 연수 강의
+        </div>
+      </div>
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:36px;margin-bottom:12px;">💡</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:8px;">수업 활용 팁</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          • 체육 시간 준비운동으로 3~5분 활용<br>
+          • 학생별 수준별 게임 배정<br>
+          • 성공 결과 화면을 학부모에게 공유<br>
+          • 포트폴리오용 스크린샷 저장
+        </div>
+      </div>
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:36px;margin-bottom:12px;">📈</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:8px;">기대 효과</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+          • 학생 운동 참여 동기 향상<br>
+          • 즉각적 피드백으로 학습 효율 증가<br>
+          • 교사 수업 준비 시간 절약<br>
+          • 객관적 성취 기록 보관 가능
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(6,182,212,0.2));border:1px solid rgba(124,58,237,0.3);border-radius:16px;padding:22px;">
+        <div style="font-size:36px;margin-bottom:12px;">🔗</div>
+        <div style="font-size:16px;font-weight:800;margin-bottom:8px;">공유용 링크 복사</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">이 포털 주소를 선생님들께 공유하세요!</div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 12px;font-size:11px;color:#a78bfa;font-family:monospace;word-break:break-all;margin-bottom:12px;" id="portal-url">https://aigw2026-cpu.github.io/special-edu-portal/</div>
+        <button onclick="copyLink()" style="width:100%;padding:10px;background:var(--brand);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;" id="copy-btn">📋 링크 복사하기</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SNS 공유 문구 -->
+<section id="contact" style="background:var(--dark2);">
+  <div class="section-inner">
+    <span class="section-tag st-green">💬 SHARE</span>
+    <h2 class="section-title">SNS 공유 문구</h2>
+    <p class="section-sub">아래 문구를 복사해서 카톡·밴드·인스타에 공유해 보세요!</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:13px;font-weight:700;color:#67e8f9;margin-bottom:10px;">💬 카카오톡 공유용</div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;font-size:13px;color:#ddd;line-height:1.7;white-space:pre-line;" id="msg-kakao">🏃 특수체육 AI 게임 소개합니다!
+
+카메라로 학생 동작을 자동 인식해서
+성공/실패를 판정해주는 무료 게임이에요.
+
+✅ 설치 불필요 - 브라우저 바로 실행
+✅ 팔 동작, 스쿼트, 앞뒤 이동 감지
+✅ 교사 대시보드로 학생 관리
+✅ 완전 무료!
+
+👉 https://aigw2026-cpu.github.io/special-edu-portal/
+
+#특수체육 #특수교육 #AI체육 #보조공학</div>
+        <button onclick="copyMsg('msg-kakao','btn-k')" id="btn-k" style="margin-top:12px;width:100%;padding:9px;background:#fee500;color:#000;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">📋 카카오 문구 복사</button>
+      </div>
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:13px;font-weight:700;color:#f9a8d4;margin-bottom:10px;">📸 인스타그램 캡션</div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;font-size:13px;color:#ddd;line-height:1.7;white-space:pre-line;" id="msg-insta">AI가 학생 동작을 실시간 인식 🤸
+
+특수체육 수업에서 학생들이
+스스로 몸을 움직이며 성공하는 경험!
+
+카메라 하나로 스쿼트, 팔 동작,
+앞뒤 이동까지 자동 판정 ✨
+
+링크는 프로필에! 💜
+
+#특수체육 #특수교육 #AI교육
+#보조공학기기 #체육수업 #특수학급
+#교육테크 #에듀테크 #SmartEdu</div>
+        <button onclick="copyMsg('msg-insta','btn-i')" id="btn-i" style="margin-top:12px;width:100%;padding:9px;background:linear-gradient(90deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">📋 인스타 문구 복사</button>
+      </div>
+
+      <div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:22px;">
+        <div style="font-size:13px;font-weight:700;color:#6ee7b7;margin-bottom:10px;">🏫 학교 공문 / 가정통신문용</div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;font-size:13px;color:#ddd;line-height:1.7;white-space:pre-line;" id="msg-school">■ AI 특수체육 게임 활용 안내
+
+AI 카메라 기술을 활용한 특수체육
+학습 게임 플랫폼을 수업에 활용합니다.
+
+- 학생의 신체 동작을 AI가 자동 인식
+- 스마트폰·태블릿에서 즉시 실행 가능
+- 설치 프로그램 없이 브라우저로 실행
+- 교사용 대시보드로 학습 결과 기록
+
+접속 주소:
+https://aigw2026-cpu.github.io/special-edu-portal/</div>
+        <button onclick="copyMsg('msg-school','btn-s')" id="btn-s" style="margin-top:12px;width:100%;padding:9px;background:#10b981;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">📋 공문 문구 복사</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer style="background:#050510;padding:40px 24px;text-align:center;border-top:1px solid var(--border);">
+  <div style="font-size:20px;font-weight:900;color:#a78bfa;margin-bottom:8px;">🏃 특수체육 AI 포털</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">현장 선생님을 위한 무료 AI 체육 학습 플랫폼</div>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">
+    <a href="https://aigw2026-cpu.github.io/special-edu-motion-game/" target="_blank" style="color:#a78bfa;font-size:12px;text-decoration:none;">픽토그램 게임</a>
+    <a href="https://aigw2026-cpu.github.io/shape-follow-game/" target="_blank" style="color:#67e8f9;font-size:12px;text-decoration:none;">모양 카운트 v1</a>
+    <a href="https://aigw2026-cpu.github.io/shape-follow-game/game-v2.html" target="_blank" style="color:#f9a8d4;font-size:12px;text-decoration:none;">팔 동작 v2</a>
+    <a href="https://aigw2026-cpu.github.io/shape-follow-game/game-v3.html" target="_blank" style="color:#fcd34d;font-size:12px;text-decoration:none;">거리·스쿼트 v3</a>
+    <a href="https://aigw2026-cpu.github.io/shape-follow-game/dashboard.html" target="_blank" style="color:#6ee7b7;font-size:12px;text-decoration:none;">교사 대시보드</a>
+  </div>
+  <div style="font-size:11px;color:#333;">© 2026 Special-Edu AI Portal · MIT License · Made with 💜 for teachers</div>
+</footer>
+
+<script>
+function copyLink() {
+  const url = 'https://aigw2026-cpu.github.io/special-edu-portal/';
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✅ 복사됨!';
+    btn.style.background = '#10b981';
+    setTimeout(()=>{ btn.textContent='📋 링크 복사하기'; btn.style.background=''; },2000);
+  });
+}
+function copyMsg(id, btnId) {
+  const txt = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn = document.getElementById(btnId);
+    const orig = btn.textContent;
+    btn.textContent = '✅ 복사됨!';
+    setTimeout(()=>{ btn.textContent = orig; },2000);
+  });
+}
+// 부드러운 스크롤 네비게이션 활성 표시
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{ if(window.scrollY>=s.offsetTop-80) cur=s.id; });
+  navLinks.forEach(a=>{
+    a.style.color = a.getAttribute('href')==='#'+cur ? '#fff' : '';
+  });
+});
+</script>
+</body>
+</html>
